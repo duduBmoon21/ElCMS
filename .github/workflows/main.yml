@@ -19,13 +19,12 @@ jobs:
     - name: Install PHP and Composer
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '8.0.2' # Adjust to match your Laravel project's PHP version
+        php-version: '8.0.2' # Adjust to match your project's PHP version
         tools: composer
 
-    # Set working directory and install PHP dependencies
+    # Install PHP dependencies
     - name: Install PHP Dependencies
-      run: composer install
-      working-directory: ./ElCMS # Replace with the path to your Laravel project
+      run: composer install # No need for working-directory since composer.json is in the root
 
     # Deploy using FTP
     - name: FTP-Deploy-Action
@@ -34,4 +33,4 @@ jobs:
         server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
-        local-dir: ./ElCMS # Replace with the folder containing your website files
+        local-dir: . # Deploy the repository root
