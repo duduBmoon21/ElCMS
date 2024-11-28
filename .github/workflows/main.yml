@@ -1,25 +1,37 @@
 name: Publish Website to CPanel
+
 on:
   push:
     branches:
       - main
+
 jobs:
   FTP-Deploy-Action:
     name: FTP-Deploy-Action
     runs-on: ubuntu-latest
+
     steps:
+    # Checkout the repository
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    # Install PHP and Composer
     - name: Install PHP and Composer
       uses: shivammathur/setup-php@v2
       with:
-          php-version: '8.0.2' # Adjust to match the PHP version used by your Laravel project
-          tools: 'composer'
+        php-version: '8.0.2' # Adjust to match your Laravel project's PHP version
+        tools: composer
 
-    - name: Install PHP dependencies
-      run: composer install 
-        
+    # Set working directory and install PHP dependencies
+    - name: Install PHP Dependencies
+      run: composer install
+      working-directory: ./ElCMS # Replace with the path to your Laravel project
+
+    # Deploy using FTP
     - name: FTP-Deploy-Action
       uses: SamKirkland/FTP-Deploy-Action@4.3.3
       with:
-        server: ${{ secrets.FTP_PASSWORD}}
+        server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: ./ElCMS # Replace with the folder containing your website files
